@@ -14,5 +14,5 @@
 
 - Para ejecutar el proyecto necesitas ingresar estos comando en tu terminal:
 - **npm install** (si estas trabajando con npm) | *yarn install* (si estas trabajando con yarn)
-- **npm start** (para levantar el proyecto en tu local) | *yarn start*
+- **npm run dev** (para levantar el proyecto en tu local) | *yarn dev*
 ##
