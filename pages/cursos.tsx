@@ -1,11 +1,22 @@
-import React from 'react';
-import { Button, Grid, Input, Pagination, useTheme } from '@geist-ui/react';
+import React, { useEffect, useState } from 'react';
+import { Button, Grid, Input, Pagination, Select, useTheme } from '@geist-ui/react';
 import SearchIcon from '@geist-ui/react-icons/search';
-import ProjectCard from '@/components/project-card';
+import MyCard from '@/components/my-card';
 import { ChevronLeft, ChevronRight } from 'react-feather';
+import { getCourses } from 'api/courses';
 
 const Page = () => {
   const theme = useTheme();
+
+  const [courses, setCourses] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const student = await getCourses();
+      setCourses(student.data?.data);
+    };
+    fetchData();
+  }, []);
 
   return (
     <>
@@ -18,20 +29,34 @@ const Page = () => {
               icon={<SearchIcon color={theme.palette.accents_5} />}
               placeholder="Search..."
             />
-            <Button auto type="secondary" marginLeft={1}>
+            <Select placeholder="Contabilidad" type="default" value="1" scale={1.25}>
+              <Select.Option value="1">Contabilidad</Select.Option>
+              <Select.Option value="2">Enfermeria</Select.Option>
+            </Select>
+            <Select placeholder="Primer Periodo" type="default" value="1" scale={1.25}>
+              <Select.Option value="1">Primer Periodo</Select.Option>
+              <Select.Option value="2">Segundo Periodo</Select.Option>
+              <Select.Option value="3">Tercer Periodo</Select.Option>
+              <Select.Option value="4">Cuarto Periodo</Select.Option>
+              <Select.Option value="5">Quinto Periodo</Select.Option>
+              <Select.Option value="6">Sexto Periodo</Select.Option>
+            </Select>
+            <Button auto type="success" marginLeft={1}>
               Agregar Curso
             </Button>
           </div>
           <Grid.Container gap={2} marginTop={1} justify="flex-start">
-            <Grid xs={24} sm={12} md={8}>
-              <ProjectCard projectId="github-blog" framework="next" productionHostname="github.blog" />
-            </Grid>
+            {courses.map((course) => (
+              <Grid xs={24} sm={12} md={8} key={course.id}>
+                <MyCard name={course.nombre} image={course.url_image} info={course.nDocente} />
+              </Grid>
+            ))}
           </Grid.Container>
         </div>
         <div className="page__content">
           <Grid.Container>
             <Grid xs={24} justify="center">
-              <Pagination count={10} initialPage={1} limit={5}>
+              <Pagination count={2} initialPage={1} limit={5}>
                 <Pagination.Next>
                   <ChevronRight />
                 </Pagination.Next>

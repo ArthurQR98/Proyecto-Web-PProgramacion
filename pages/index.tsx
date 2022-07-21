@@ -1,7 +1,6 @@
 import React from 'react';
 import { Card, Grid, Text, useTheme } from '@geist-ui/react';
 import Heading from '@/components/heading';
-import Card_Grafic from '@/components/card-grafic';
 import { GraficBar } from '@/components/grafic-bar';
 import { GraficPie } from '@/components/grafic-pie';
 

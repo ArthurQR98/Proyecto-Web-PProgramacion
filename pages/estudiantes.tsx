@@ -1,11 +1,37 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Grid, Input, Pagination, Select, useTheme } from '@geist-ui/react';
 import SearchIcon from '@geist-ui/react-icons/search';
-import ProjectCard from '@/components/project-card';
+import MyCard from '@/components/my-card';
 import { ChevronLeft, ChevronRight } from 'react-feather';
+import { Model_custom } from '@/components/model-custom';
+import { AddEstudentForm } from '@/components/add-estudent-form';
+import { getStudents } from 'api/students';
 
 const Page = () => {
   const theme = useTheme();
+
+  const [isVisibleModal, setIsVisibleModal] = useState(false);
+  const [modalTitle, setModalTitle] = useState('');
+  const [modalContent, setModalContent] = useState(null);
+
+  const [students, setStudents] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const student = await getStudents();
+      setStudents(student.data?.data);
+    };
+    fetchData();
+  }, []);
+
+  const handler = () => {
+    setIsVisibleModal(true);
+    setModalTitle('Agregar Estudiante');
+    setModalContent(<AddEstudentForm setIsVisibleModal={setIsVisibleModal} />);
+  };
+  const closeHandler = () => {
+    setIsVisibleModal(false);
+  };
 
   return (
     <>
@@ -18,43 +44,29 @@ const Page = () => {
               icon={<SearchIcon color={theme.palette.accents_5} />}
               placeholder="Search..."
             />
-            <Select placeholder="Todos" type="default" scale={1.25}>
-              <Select.Option>Todos</Select.Option>
-              <Select.Option value="1">Contabilidad</Select.Option>
-              <Select.Option value="2">Enfermeria</Select.Option>
+            <Select placeholder="Estudiante" type="default" value="1" scale={1.25}>
+              <Select.Option value="1">Estudiante</Select.Option>
+              <Select.Option value="2">Egresado</Select.Option>
             </Select>
-            <Button auto type="success" marginLeft={1}>
+            <Button auto onClick={handler} type="success" marginLeft={1}>
               Agregar Estudiante
             </Button>
+            <Model_custom
+              title={modalTitle}
+              stateInitial={isVisibleModal}
+              setState={setIsVisibleModal}
+              closeHandler={closeHandler}
+            >
+              {modalContent}
+            </Model_custom>
           </div>
+
           <Grid.Container gap={2} marginTop={1} justify="flex-start">
-            <Grid xs={24} sm={12} md={8}>
-              <ProjectCard projectId="github-blog" framework="next" productionHostname="github.blog" />
-            </Grid>
-            <Grid xs={24} sm={12} md={8}>
-              <ProjectCard projectId="github-blog" framework="next" productionHostname="github.blog" />
-            </Grid>
-            <Grid xs={24} sm={12} md={8}>
-              <ProjectCard projectId="github-blog" framework="next" productionHostname="github.blog" />
-            </Grid>
-            <Grid xs={24} sm={12} md={8}>
-              <ProjectCard projectId="github-blog" framework="next" productionHostname="github.blog" />
-            </Grid>
-            <Grid xs={24} sm={12} md={8}>
-              <ProjectCard projectId="github-blog" framework="next" productionHostname="github.blog" />
-            </Grid>
-            <Grid xs={24} sm={12} md={8}>
-              <ProjectCard projectId="github-blog" framework="next" productionHostname="github.blog" />
-            </Grid>
-            <Grid xs={24} sm={12} md={8}>
-              <ProjectCard projectId="github-blog" framework="next" productionHostname="github.blog" />
-            </Grid>
-            <Grid xs={24} sm={12} md={8}>
-              <ProjectCard projectId="github-blog" framework="next" productionHostname="github.blog" />
-            </Grid>
-            <Grid xs={24} sm={12} md={8}>
-              <ProjectCard projectId="github-blog" framework="next" productionHostname="github.blog" />
-            </Grid>
+            {students.map((student) => (
+              <Grid xs={24} sm={12} md={8} key={student.id}>
+                <MyCard name={student.nombres} image={student.url_image} info={student.codigo} />
+              </Grid>
+            ))}
           </Grid.Container>
         </div>
         <div className="page__content">
