@@ -7,7 +7,7 @@ const Footer: React.FC = () => {
   return (
     <>
       <footer>
-        <Text>Diseñado y creado por GRUPO N°4 💻</Text>
+        <Text>ArthurDev 💻</Text>
       </footer>
       <style jsx>{`
         footer {

@@ -1,19 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Grid, Input, Pagination, Select, useTheme } from '@geist-ui/react';
 import SearchIcon from '@geist-ui/react-icons/search';
-import MyCard from '@/components/my-card';
 import { ChevronLeft, ChevronRight } from 'react-feather';
-import { getCourses } from 'api/courses';
+import { Course, CoursesResponse, Meta } from 'interfaces/coursesResponse';
+import { baseAPI } from 'api/baseApi';
+import MyCardCourse from '@/components/my-cardCourse';
 
 const Page = () => {
   const theme = useTheme();
 
   const [courses, setCourses] = useState([]);
+  const [metadatos, setMetadatos] = useState<Meta>({} as Meta);
 
   useEffect(() => {
     const fetchData = async () => {
-      const student = await getCourses();
-      setCourses(student.data?.data);
+      const courses = await baseAPI.get<CoursesResponse>('/course');
+      setCourses(courses.data.data);
+      setMetadatos(courses.data.meta);
     };
     fetchData();
   }, []);
@@ -46,9 +49,9 @@ const Page = () => {
             </Button>
           </div>
           <Grid.Container gap={2} marginTop={1} justify="flex-start">
-            {courses.map((course) => (
+            {courses.map((course: Course) => (
               <Grid xs={24} sm={12} md={8} key={course.id}>
-                <MyCard name={course.nombre} image={course.url_image} info={course.nDocente} />
+                <MyCardCourse id={course.id} name={course.nombre} image={course.url_image} info={course.nDocente} />
               </Grid>
             ))}
           </Grid.Container>
@@ -56,7 +59,7 @@ const Page = () => {
         <div className="page__content">
           <Grid.Container>
             <Grid xs={24} justify="center">
-              <Pagination count={2} initialPage={1} limit={5}>
+              <Pagination count={metadatos.lastPage} initialPage={metadatos.currentPage} limit={metadatos.perPage}>
                 <Pagination.Next>
                   <ChevronRight />
                 </Pagination.Next>

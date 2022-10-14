@@ -1,17 +1,38 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import { Avatar, Button, Text, Card, useTheme } from '@geist-ui/react';
 import { Edit3, Trash2 } from 'react-feather';
+import { MyModal } from './model-custom';
+import { baseAPI } from '../api/baseApi';
 
 interface Props {
   name: string;
   info: string;
   image: string;
+  id: number;
+  setReloadStudent?: Dispatch<SetStateAction<boolean>>;
 }
 
 export type MyCardProps = Props;
 
-const MyCard: React.FC<MyCardProps> = ({ name, info, image }) => {
+const MyCardCourse: React.FC<MyCardProps> = ({ id, name, info, image, setReloadStudent }) => {
   const theme = useTheme();
+  const [isVisibleModal, setIsVisibleModal] = useState(false);
+  const [modalContent, setModalContent] = useState(null);
+
+  const removeHandler = () => {
+    setIsVisibleModal(true);
+    setModalContent(<Text p>{`¿Estas seguro que quieres eliminar a ${name}?`}</Text>);
+  };
+
+  const closeHandler = () => {
+    setIsVisibleModal(false);
+  };
+
+  const remove = async () => {
+    await baseAPI.delete(`/student/${id}`);
+    setIsVisibleModal(false);
+    setReloadStudent(true);
+  };
 
   return (
     <>
@@ -20,7 +41,7 @@ const MyCard: React.FC<MyCardProps> = ({ name, info, image }) => {
           <div className="card-title__wrapper">
             <Avatar src={image} height={5} width={5} marginRight={0.75} className="card-icon" />
             <div className="card-title__content">
-              <Text margin={0} style={{ fontWeight: 500, lineHeight: '1.5rem' }}>
+              <Text margin={0} font="16px" style={{ fontWeight: 500, lineHeight: '1.5rem' }}>
                 {name}
               </Text>
               <Text margin={0} font="0.875rem" style={{ color: theme.palette.accents_6, lineHeight: '1.25rem' }}>
@@ -32,11 +53,22 @@ const MyCard: React.FC<MyCardProps> = ({ name, info, image }) => {
             <Button icon={<Edit3 />} type="success" ghost auto scale={2 / 3} px={0.6}>
               Actualizar
             </Button>
-            <Button icon={<Trash2 />} type="error" ghost auto scale={2 / 3} px={0.6}>
+            <Button icon={<Trash2 />} type="error" ghost auto scale={2 / 3} px={0.6} onClick={removeHandler}>
               Eliminar
             </Button>
           </Card.Footer>
         </Card>
+
+        <MyModal
+          title="Eliminar"
+          nameAction="Eliminar"
+          stateInitial={isVisibleModal}
+          setState={setIsVisibleModal}
+          closeHandler={closeHandler}
+          exec={remove}
+        >
+          {modalContent}
+        </MyModal>
       </div>
       <style jsx>{`
         .my__card .footer {
@@ -69,4 +101,4 @@ const MyCard: React.FC<MyCardProps> = ({ name, info, image }) => {
   );
 };
 
-export default MyCard;
+export default MyCardCourse;

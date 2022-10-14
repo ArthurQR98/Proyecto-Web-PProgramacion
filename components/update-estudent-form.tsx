@@ -2,26 +2,49 @@ import { Avatar, Input, Radio, Spacer, useTheme } from '@geist-ui/react';
 import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
 const noAvatar = '/assets/no-avatar.png';
 import { useDropzone } from 'react-dropzone';
+import { Student } from '../interfaces/actionsResponse';
 
 interface Props {
+  student: Student;
   setStudentData: React.Dispatch<React.SetStateAction<{}>>;
-  status: string | string[];
 }
 
-export const AddEstudentForm = ({ setStudentData, status }: Props) => {
+interface StateStudent {
+  sexo: string;
+  nombres: string;
+  apellidos: string;
+  direccion: string;
+  nroTelefono: string;
+  dni: string;
+  edad: number;
+  image?: any;
+}
+
+export const UpdateEstudentForm = ({ student, setStudentData }: Props) => {
   const { palette } = useTheme();
 
-  const [genero, setGenero] = useState('M');
-  const [student, setStudent] = useState({});
+  const [stateStudent, setStateStudent] = useState<StateStudent>({} as StateStudent);
   const [avatar, setAvatar] = useState(null);
   const [avatarUrl, setAvatarUrl] = useState(null);
 
   // important
   useEffect(() => {
-    if (student) {
-      setStudentData(student);
+    if (stateStudent) {
+      setStudentData(stateStudent);
     }
-  }, [student]);
+  }, [stateStudent]);
+
+  useEffect(() => {
+    setStateStudent({
+      nombres: student.nombres,
+      apellidos: student.apellidos,
+      direccion: student.direccion,
+      nroTelefono: student.nroTelefono,
+      sexo: student.sexo,
+      dni: student.dni,
+      edad: student.edad
+    });
+  }, []);
 
   useEffect(() => {
     if (avatar) {
@@ -31,21 +54,15 @@ export const AddEstudentForm = ({ setStudentData, status }: Props) => {
         setAvatarUrl(avatar);
       }
     } else {
-      setAvatarUrl(null);
+      setAvatarUrl(student.url_image);
     }
   }, [avatar]);
 
   useEffect(() => {
     if (avatar) {
-      setStudent({ ...student, ['image']: avatar.file });
+      setStateStudent({ ...stateStudent, ['image']: avatar.file });
     }
   }, [avatar]);
-
-  useEffect(() => {
-    if (genero) {
-      setStudent({ ...student, estado: status, ['sexo']: genero });
-    }
-  }, [genero]);
 
   const onDrop = useCallback(
     (acceptedFiles) => {
@@ -63,11 +80,11 @@ export const AddEstudentForm = ({ setStudentData, status }: Props) => {
   });
 
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setStudent({ ...student, [event.target.name]: event.target.value });
+    setStateStudent({ ...stateStudent, [event.target.name]: event.target.value });
   };
 
-  const handler = (value) => {
-    setGenero(value);
+  const changeSex = (value) => {
+    setStateStudent({ ...stateStudent, sexo: value });
   };
 
   return (
@@ -84,7 +101,7 @@ export const AddEstudentForm = ({ setStudentData, status }: Props) => {
         <p>El peso máximo para una foto es de un 1MB</p>
       </span>
       <div className="container">
-        <Radio.Group value={genero} useRow onChange={handler}>
+        <Radio.Group value={stateStudent.sexo} useRow onChange={changeSex}>
           <Radio value="M">Masculino</Radio>
           <Radio value="F">Femenino</Radio>
         </Radio.Group>
@@ -94,19 +111,35 @@ export const AddEstudentForm = ({ setStudentData, status }: Props) => {
           placeholder="Nombre"
           name="nombres"
           width="100%"
+          value={stateStudent.nombres}
           clearable
           onChange={(event) => onChange(event)}
           autoFocus
         />
         <Spacer h={0.5} />
-        <Input placeholder="Apellidos" name="apellidos" width="100%" clearable onChange={(event) => onChange(event)} />
+        <Input
+          placeholder="Apellidos"
+          name="apellidos"
+          value={stateStudent.apellidos}
+          width="100%"
+          clearable
+          onChange={(event) => onChange(event)}
+        />
         <Spacer h={0.5} />
-        <Input placeholder="Direccion" name="direccion" width="100%" clearable onChange={(event) => onChange(event)} />
+        <Input
+          placeholder="Direccion"
+          name="direccion"
+          value={stateStudent.direccion}
+          width="100%"
+          clearable
+          onChange={(event) => onChange(event)}
+        />
         <Spacer h={0.5} />
         <Input
           label="+51"
           placeholder="Nro. Celular"
           name="nroTelefono"
+          value={stateStudent.nroTelefono}
           width="100%"
           clearable
           onChange={(event) => onChange(event)}
@@ -115,9 +148,23 @@ export const AddEstudentForm = ({ setStudentData, status }: Props) => {
       </div>
 
       <div className="container row">
-        <Input htmlType="number" placeholder="DNI" name="dni" width="100%" onChange={(event) => onChange(event)} />
+        <Input
+          htmlType="number"
+          placeholder="DNI"
+          name="dni"
+          value={stateStudent.dni}
+          width="100%"
+          onChange={(event) => onChange(event)}
+        />
         <Spacer h={0.5} />
-        <Input htmlType="number" placeholder="Edad" name="edad" width="100%" onChange={(event) => onChange(event)} />
+        <Input
+          htmlType="number"
+          placeholder="Edad"
+          name="edad"
+          value={`${stateStudent.edad}`}
+          width="100%"
+          onChange={(event) => onChange(event)}
+        />
       </div>
 
       <style jsx>{`

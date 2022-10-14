@@ -1,6 +1,7 @@
 import React from 'react';
-import { Button, Card, Grid, Text, useTheme } from '@geist-ui/react';
+import { Button, Card, Grid, useTheme } from '@geist-ui/react';
 import Heading from '@/components/heading';
+import Toast from '@/components/toast';
 
 const Page = () => {
   const theme = useTheme();

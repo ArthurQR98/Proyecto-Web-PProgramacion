@@ -1,37 +1,45 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, Grid, Input, Pagination, Select, useTheme } from '@geist-ui/react';
 import SearchIcon from '@geist-ui/react-icons/search';
-import MyCard from '@/components/my-card';
+import MyCardStudent from '@/components/my-cardStudent';
 import { ChevronLeft, ChevronRight } from 'react-feather';
-import { Model_custom } from '@/components/model-custom';
+import { MyModal } from '@/components/model-custom';
 import { AddEstudentForm } from '@/components/add-estudent-form';
-import { getStudents } from 'api/students';
+import { Student } from 'interfaces/studentsResponse';
+import { useStudentPage } from 'hooks/useStudentPage';
 
 const Page = () => {
   const theme = useTheme();
+  const [studentData, setStudentData] = useState({});
+  const [loading, setLoading] = useState(false);
 
+  // Modal
   const [isVisibleModal, setIsVisibleModal] = useState(false);
-  const [modalTitle, setModalTitle] = useState('');
   const [modalContent, setModalContent] = useState(null);
 
-  const [students, setStudents] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const student = await getStudents();
-      setStudents(student.data?.data);
-    };
-    fetchData();
-  }, []);
-
-  const handler = () => {
+  // Modal
+  const showModal = () => {
     setIsVisibleModal(true);
-    setModalTitle('Agregar Estudiante');
-    setModalContent(<AddEstudentForm setIsVisibleModal={setIsVisibleModal} />);
+    setModalContent(<AddEstudentForm status={status} setStudentData={setStudentData} />);
   };
-  const closeHandler = () => {
+
+  // Modal
+  const closeModal = () => {
+    setStudentData({});
     setIsVisibleModal(false);
   };
+
+  const {
+    setReloadStudent,
+    status,
+    currentPage,
+    onQueryChanged,
+    selectHandler,
+    students,
+    metadatos,
+    nextPage,
+    addUser
+  } = useStudentPage(studentData, closeModal, setLoading);
 
   return (
     <>
@@ -43,28 +51,47 @@ const Page = () => {
               width="100%"
               icon={<SearchIcon color={theme.palette.accents_5} />}
               placeholder="Search..."
+              clearable
+              onChange={onQueryChanged}
             />
-            <Select placeholder="Estudiante" type="default" value="1" scale={1.25}>
+            <Select
+              placeholder="Estudiante"
+              type="default"
+              value="1"
+              scale={1.25}
+              onChange={(value) => selectHandler(value)}
+            >
               <Select.Option value="1">Estudiante</Select.Option>
               <Select.Option value="2">Egresado</Select.Option>
             </Select>
-            <Button auto onClick={handler} type="success" marginLeft={1}>
+            <Button auto onClick={showModal} type="success" marginLeft={1}>
               Agregar Estudiante
             </Button>
-            <Model_custom
-              title={modalTitle}
+
+            <MyModal
+              title="Agregar Estudiante"
+              nameAction="Guardar"
               stateInitial={isVisibleModal}
+              loading={loading}
               setState={setIsVisibleModal}
-              closeHandler={closeHandler}
+              closeHandler={closeModal}
+              exec={addUser}
             >
               {modalContent}
-            </Model_custom>
+            </MyModal>
           </div>
 
           <Grid.Container gap={2} marginTop={1} justify="flex-start">
-            {students.map((student) => (
+            {students.map((student: Student) => (
               <Grid xs={24} sm={12} md={8} key={student.id}>
-                <MyCard name={student.nombres} image={student.url_image} info={student.codigo} />
+                <MyCardStudent
+                  student={student}
+                  setReloadStudent={setReloadStudent}
+                  studentData={studentData}
+                  setStudentData={setStudentData}
+                  loading={loading}
+                  setLoading={setLoading}
+                />
               </Grid>
             ))}
           </Grid.Container>
@@ -72,7 +99,12 @@ const Page = () => {
         <div className="page__content">
           <Grid.Container>
             <Grid xs={24} justify="center">
-              <Pagination count={10} initialPage={1} limit={5}>
+              <Pagination
+                count={metadatos.lastPage}
+                page={currentPage}
+                limit={metadatos.perPage}
+                onChange={(pageNumber) => nextPage(pageNumber)}
+              >
                 <Pagination.Next>
                   <ChevronRight />
                 </Pagination.Next>
@@ -113,4 +145,5 @@ const Page = () => {
     </>
   );
 };
+
 export default Page;
