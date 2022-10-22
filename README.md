@@ -1,18 +1,114 @@
-# Pasos a seguir :
-- Cuando quieras bajar los cambios de algun compañero, para que lo tengas actualizado con tu repo local debes ingresar el siguiente comando:
-    **git pull origin master**
-   esto sincronizará el proyecto local con el de la nube.
-- Cuando tengas un cambio o modificacion en cualquier archivo, el comando a utilizar es el siguiente:
-    **git add .**
-    Este comando agrega a la cola de subida todos los cambios que haz realizado en el proyecto. (tambien se puede modificar para eso necesitas leer la documentacion).
-- Usar el siguiente comando debes poner un nombre que tenga referencia con lo que hiciste en el proyecto:
-   **git commit -m "texto simple detallando lo que realizaste"**
-- Cuando tengas que subir tu cambio a la nube para que todo el equipo lo visualice se usa el siguiente comando:
-    **git push origin "ramadetrabajo"** ejemplo : git push origin master
-- Para saber más sobre esto visita la siguiente url: [Documentacion oficial]:"https://training.github.com/downloads/es_ES/github-git-cheat-sheet/"
-## Comandos disponibles para npm
+<p align="center">
+  <a href="" rel="noopener">
+ <img width=200px height=200px src="https://i.imgur.com/6wj0hh6.jpg" alt="Project logo"></a>
+</p>
 
-- Para ejecutar el proyecto necesitas ingresar estos comando en tu terminal:
-- **npm install** (si estas trabajando con npm) | *yarn install* (si estas trabajando con yarn)
-- **npm run dev** (para levantar el proyecto en tu local) | *yarn dev*
-##
+<h3 align="center">boilerplate-hexagonal</h3>
+
+<div align="center">
+
+[![Status](https://img.shields.io/badge/status-active-success.svg)]()
+[![GitHub Issues](https://img.shields.io/github/issues/kylelobo/The-Documentation-Compendium.svg)](https://github.com/kylelobo/The-Documentation-Compendium/issues)
+[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/kylelobo/The-Documentation-Compendium.svg)](https://github.com/kylelobo/The-Documentation-Compendium/pulls)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
+
+</div>
+
+---
+
+<p align="center"> Few lines describing your project.
+    <br> 
+</p>
+
+## 📝 Table of Contents
+
+- [About](#about)
+- [Getting Started](#getting_started)
+- [Deployment](#deployment)
+- [Usage](#usage)
+- [Built Using](#built_using)
+- [TODO](../TODO.md)
+- [Contributing](../CONTRIBUTING.md)
+- [Authors](#authors)
+- [Acknowledgments](#acknowledgement)
+
+## 🧐 About <a name = "about"></a>
+
+Write about 1-2 paragraphs describing the purpose of your project.
+
+## 🏁 Getting Started <a name = "getting_started"></a>
+
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See [deployment](#deployment) for notes on how to deploy the project on a live system.
+
+### Prerequisites
+
+What things you need to install the software and how to install them.
+
+```
+Give examples
+```
+
+### Installing
+
+A step by step series of examples that tell you how to get a development env running.
+
+Say what the step will be
+
+```
+Give the example
+```
+
+And repeat
+
+```
+until finished
+```
+
+End with an example of getting some data out of the system or using it for a little demo.
+
+## 🔧 Running the tests <a name = "tests"></a>
+
+Explain how to run the automated tests for this system.
+
+### Break down into end to end tests
+
+Explain what these tests test and why
+
+```
+Give an example
+```
+
+### And coding style tests
+
+Explain what these tests test and why
+
+```
+Give an example
+```
+
+## 🎈 Usage <a name="usage"></a>
+
+Add notes about how to use the system.
+
+## 🚀 Deployment <a name = "deployment"></a>
+
+Add additional notes about how to deploy this on a live system.
+
+## ⛏️ Built Using <a name = "built_using"></a>
+
+- [MongoDB](https://www.mongodb.com/) - Database
+- [Express](https://expressjs.com/) - Server Framework
+- [VueJs](https://vuejs.org/) - Web Framework
+- [NodeJs](https://nodejs.org/en/) - Server Environment
+
+## ✍️ Authors <a name = "authors"></a>
+
+- [@kylelobo](https://github.com/kylelobo) - Idea & Initial work
+
+See also the list of [contributors](https://github.com/kylelobo/The-Documentation-Compendium/contributors) who participated in this project.
+
+## 🎉 Acknowledgements <a name = "acknowledgement"></a>
+
+- Hat tip to anyone whose code was used
+- Inspiration
+- References
