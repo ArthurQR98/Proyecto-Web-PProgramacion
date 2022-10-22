@@ -3,85 +3,72 @@ import { Avatar, Button, Text, Card, useTheme, useToasts } from '@geist-ui/react
 import { Edit3, Trash2 } from 'react-feather';
 import { MyModal } from './model-custom';
 import { baseAPI } from '../api/baseApi';
-import { DeleteStudentResponse } from 'interfaces/actionsResponse';
-import { Student } from 'interfaces/studentsResponse';
-import { UpdateEstudentForm } from './update-estudent-form';
-const noAvatar = '/assets/no-avatar.png';
+import { Course } from 'interfaces/coursesResponse';
+import { DeleteCourseResponse } from 'interfaces/actionsResponse';
+import { UpdateCourseForm } from './update-course-form';
 
 interface Props {
-  student: Student;
-  studentData: {};
-  setReloadStudent: Dispatch<SetStateAction<boolean>>;
-  setStudentData?: React.Dispatch<React.SetStateAction<{}>>;
-  loading: boolean;
-  setLoading: Dispatch<SetStateAction<boolean>>;
+  course: Course;
+  courseData: {};
+  setCourseData: Dispatch<SetStateAction<{}>>;
+  setReloadCourse?: Dispatch<SetStateAction<boolean>>;
 }
 
 export type MyCardProps = Props;
 
-const MyCardStudent: React.FC<MyCardProps> = ({
-  student,
-  studentData,
-  loading,
-  setLoading,
-  setStudentData,
-  setReloadStudent
-}) => {
+const MyCardCourse: React.FC<MyCardProps> = ({ course, courseData, setReloadCourse, setCourseData }) => {
   const theme = useTheme();
-  const [exec, setExec] = useState('');
-  const [titleModal, setTitleModal] = useState('');
-  const [actionModal, setActionModal] = useState('');
-  const [isVisibleModal, setIsVisibleModal] = useState(false);
-  const [modalContent, setModalContent] = useState(null);
   const [, setToast] = useToasts();
 
-  const updateModal = () => {
-    setTitleModal('Actualizar Estudiante');
-    setActionModal('Actualizar');
-    setIsVisibleModal(true);
-    setModalContent(<UpdateEstudentForm student={student} setStudentData={setStudentData} />);
-    setExec('update');
-  };
+  const [nameAction, setNameAction] = useState('');
+  const [titleModal, setTitleModal] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [isVisibleModal, setIsVisibleModal] = useState(false);
+  const [modalContent, setModalContent] = useState(null);
+  const [exec, setExec] = useState('');
 
-  const update = async () => {
-    setLoading(true);
-    const response = await baseAPI.putForm(`/student/${student.id}`, studentData);
-    const {
-      data: { message, students }
-    } = response;
-    setToast({
-      text: `El Estudiante ${students.nombres} ${students.apellidos} fue ${message.toLowerCase()}`,
-      delay: 3000
-    });
-    setIsVisibleModal(false);
-    setReloadStudent(true);
-    setLoading(false);
-  };
-
-  const removeModal = () => {
-    setTitleModal('Eliminar Estudiante');
-    setActionModal('Eliminar');
+  const removeHandler = () => {
     setIsVisibleModal(true);
-    setModalContent(<Text p>{`¿Estas seguro que quieres eliminar a ${student.nombres} ${student.apellidos}?`}</Text>);
+    setTitleModal('Eliminar Curso');
+    setModalContent(<Text p>{`¿Estas seguro que quieres eliminar a ${course.nombre}?`}</Text>);
+    setNameAction('Eliminar');
     setExec('remove');
   };
 
-  const closeModal = () => {
+  const updateHandler = () => {
+    setIsVisibleModal(true);
+    setTitleModal('Actualizar Curso');
+    setModalContent(<UpdateCourseForm course={course} setCourseData={setCourseData} />);
+    setNameAction('Actualizar');
+    setExec('update');
+  };
+
+  const closeHandler = () => {
     setIsVisibleModal(false);
   };
 
   const remove = async () => {
     setLoading(true);
-    const response = await baseAPI.delete<DeleteStudentResponse>(`/student/${student.id}`);
+    const response = await baseAPI.delete<DeleteCourseResponse>(`/course/${course.id}`);
+    const { course: remove, message } = response.data;
+    setToast({ text: `El curso ${remove.nombre} fue ${message.toLowerCase()}`, delay: 3000 });
+    setIsVisibleModal(false);
+    setReloadCourse(true);
+    setLoading(false);
+  };
+
+  const update = async () => {
+    setLoading(true);
+    const response = await baseAPI.putForm(`/course/${course.id}`, courseData);
     const {
-      data: { message, students }
+      data: { message, course: updated }
     } = response;
     setToast({
-      text: `El Estudiante ${students.nombres} ${students.apellidos} fue ${message.toLowerCase()}`,
+      text: `El Curso ${updated.nombre} fue ${message.toLowerCase()}`,
       delay: 3000
     });
     setIsVisibleModal(false);
-    setReloadStudent(true);
+    setReloadCourse(true);
     setLoading(false);
   };
 
@@ -95,25 +82,21 @@ const MyCardStudent: React.FC<MyCardProps> = ({
       <div className="card__wrapper">
         <Card className="my__card" shadow>
           <div className="card-title__wrapper">
-            {/* ?? (Coalescing) if the value is null or undefined then assign noAvatar  */}
-            <Avatar src={student.url_image ?? noAvatar} height={5} width={5} marginRight={0.75} className="card-icon" />
+            <Avatar src={course.url_image} height={5} width={5} marginRight={0.75} className="card-icon" />
             <div className="card-title__content">
               <Text margin={0} font="16px" style={{ fontWeight: 500, lineHeight: '1.5rem' }}>
-                {student.nombres}
-              </Text>
-              <Text margin={0} font="16px" style={{ fontWeight: 500, lineHeight: '1.5rem' }}>
-                {student.apellidos}
+                {course.nombre}
               </Text>
               <Text margin={0} font="0.875rem" style={{ color: theme.palette.accents_6, lineHeight: '1.25rem' }}>
-                {student.codigo}
+                {course.nDocente}
               </Text>
             </div>
           </div>
           <Card.Footer style={{ justifyContent: 'center' }}>
-            <Button icon={<Edit3 />} type="success" ghost auto scale={2 / 3} px={0.6} onClick={updateModal}>
+            <Button icon={<Edit3 />} type="success" ghost auto scale={2 / 3} px={0.6} onClick={updateHandler}>
               Actualizar
             </Button>
-            <Button icon={<Trash2 />} type="error" ghost auto scale={2 / 3} px={0.6} onClick={removeModal}>
+            <Button icon={<Trash2 />} type="error" ghost auto scale={2 / 3} px={0.6} onClick={removeHandler}>
               Eliminar
             </Button>
           </Card.Footer>
@@ -121,11 +104,11 @@ const MyCardStudent: React.FC<MyCardProps> = ({
 
         <MyModal
           title={titleModal}
-          nameAction={actionModal}
+          nameAction={nameAction}
           stateInitial={isVisibleModal}
           loading={loading}
           setState={setIsVisibleModal}
-          closeHandler={closeModal}
+          closeHandler={closeHandler}
           exec={operations[exec]}
         >
           {modalContent}
@@ -162,4 +145,4 @@ const MyCardStudent: React.FC<MyCardProps> = ({
   );
 };
 
-export default MyCardStudent;
+export default MyCardCourse;

@@ -2,54 +2,45 @@ import { Avatar, Input, Radio, Spacer, useTheme } from '@geist-ui/react';
 import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
 const noAvatar = '/assets/no-avatar.png';
 import { useDropzone } from 'react-dropzone';
-import { Student } from '../interfaces/actionsResponse';
+import { Course } from '../interfaces/actionsResponse';
 
 interface Props {
-  student: Student;
-  setStudentData: React.Dispatch<React.SetStateAction<{}>>;
+  course: Course;
+  setCourseData: React.Dispatch<React.SetStateAction<{}>>;
 }
 
-interface StateStudent {
-  sexo: string;
-  nombres: string;
-  apellidos: string;
-  direccion: string;
-  nroTelefono: string;
-  dni: string;
-  edad: string;
-  image?: any;
+interface StateCourse {
+  nombre: string;
+  creditos: string;
+  nHoras: string;
+  nDocente: string;
+  image?;
 }
 
-export const UpdateEstudentForm = ({ student, setStudentData }: Props) => {
+export const UpdateCourseForm = ({ course, setCourseData }: Props) => {
   const { palette } = useTheme();
 
-  const [stateStudent, setStateStudent] = useState<StateStudent>({
-    nombres: '',
-    apellidos: '',
-    sexo: '',
-    direccion: '',
-    nroTelefono: '',
-    dni: '',
-    edad: ''
+  const [stateCourse, setStateCourse] = useState<StateCourse>({
+    nombre: '',
+    creditos: '',
+    nHoras: '',
+    nDocente: ''
   });
   const [avatar, setAvatar] = useState(null);
   const [avatarUrl, setAvatarUrl] = useState(null);
 
   useEffect(() => {
-    if (stateStudent) {
-      setStudentData(stateStudent);
+    if (stateCourse) {
+      setCourseData(stateCourse);
     }
-  }, [stateStudent]);
+  }, [stateCourse]);
 
   useEffect(() => {
-    setStateStudent({
-      nombres: student.nombres,
-      apellidos: student.apellidos,
-      direccion: student.direccion,
-      nroTelefono: student.nroTelefono,
-      sexo: student.sexo,
-      dni: student.dni,
-      edad: student.edad.toString()
+    setStateCourse({
+      nombre: course.nombre,
+      creditos: course.creditos.toString(),
+      nHoras: course.nHoras.toString(),
+      nDocente: course.nDocente
     });
   }, []);
 
@@ -61,13 +52,13 @@ export const UpdateEstudentForm = ({ student, setStudentData }: Props) => {
         setAvatarUrl(avatar);
       }
     } else {
-      setAvatarUrl(student.url_image);
+      setAvatarUrl(course.url_image);
     }
   }, [avatar]);
 
   useEffect(() => {
     if (avatar) {
-      setStateStudent({ ...stateStudent, ['image']: avatar.file });
+      setStateCourse({ ...stateCourse, ['image']: avatar.file });
     }
   }, [avatar]);
 
@@ -87,11 +78,7 @@ export const UpdateEstudentForm = ({ student, setStudentData }: Props) => {
   });
 
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setStateStudent({ ...stateStudent, [event.target.name]: event.target.value });
-  };
-
-  const changeSex = (value) => {
-    setStateStudent({ ...stateStudent, sexo: value });
+    setStateCourse({ ...stateCourse, [event.target.name]: event.target.value });
   };
 
   return (
@@ -107,71 +94,46 @@ export const UpdateEstudentForm = ({ student, setStudentData }: Props) => {
       <span style={{ textAlign: 'center', color: palette.accents_3 }}>
         <p>El peso máximo para una foto es de un 1MB</p>
       </span>
-      <div className="container">
-        <Radio.Group value={stateStudent.sexo} useRow onChange={changeSex}>
-          <Radio value="M">Masculino</Radio>
-          <Radio value="F">Femenino</Radio>
-        </Radio.Group>
-      </div>
       <div className="container column">
         <Input
           placeholder="Nombre"
-          name="nombres"
+          name="nombre"
           width="100%"
-          value={stateStudent.nombres}
+          value={stateCourse.nombre}
           clearable
           onChange={(event) => onChange(event)}
           autoFocus
         />
         <Spacer h={0.5} />
         <Input
-          placeholder="Apellidos"
-          name="apellidos"
-          value={stateStudent.apellidos}
-          width="100%"
-          clearable
-          onChange={(event) => onChange(event)}
-        />
-        <Spacer h={0.5} />
-        <Input
-          placeholder="Direccion"
-          name="direccion"
-          value={stateStudent.direccion}
-          width="100%"
-          clearable
-          onChange={(event) => onChange(event)}
-        />
-        <Spacer h={0.5} />
-        <Input
-          label="+51"
-          placeholder="Nro. Celular"
-          name="nroTelefono"
-          value={stateStudent.nroTelefono}
-          width="100%"
-          clearable
-          onChange={(event) => onChange(event)}
-        />
-        <Spacer h={0.5} />
-      </div>
-
-      <div className="container row">
-        <Input
           htmlType="number"
-          placeholder="DNI"
-          name="dni"
-          value={stateStudent.dni}
+          placeholder="Creditos"
+          name="creditos"
+          value={stateCourse.creditos}
           width="100%"
+          clearable
           onChange={(event) => onChange(event)}
         />
         <Spacer h={0.5} />
         <Input
           htmlType="number"
-          placeholder="Edad"
-          name="edad"
-          value={stateStudent.edad}
+          placeholder="Nro.Horas"
+          name="nHoras"
+          value={stateCourse.nHoras}
           width="100%"
+          clearable
           onChange={(event) => onChange(event)}
         />
+        <Spacer h={0.5} />
+        <Input
+          placeholder="Docente"
+          name="nDocente"
+          width="100%"
+          value={stateCourse.nDocente}
+          clearable
+          onChange={(event) => onChange(event)}
+        />
+        <Spacer h={0.5} />
       </div>
 
       <style jsx>{`

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, useTheme } from '@geist-ui/react';
+import { Link, Text, useTheme } from '@geist-ui/react';
 
 const Footer: React.FC = () => {
   const theme = useTheme();
@@ -7,7 +7,9 @@ const Footer: React.FC = () => {
   return (
     <>
       <footer>
-        <Text>ArthurDev 💻</Text>
+        <Link block target="_blank" href="https://github.com/ArthurQR98">
+          Visit my GitHub.
+        </Link>
       </footer>
       <style jsx>{`
         footer {

@@ -1,7 +1,5 @@
 import React from 'react';
-import NextLink from 'next/link';
-import { Avatar, Button, Tag, Text, Link, useTheme } from '@geist-ui/react';
-import * as Icons from 'react-feather';
+import { useTheme } from '@geist-ui/react';
 
 const Heading = () => {
   const theme = useTheme();
@@ -12,8 +10,7 @@ const Heading = () => {
         <div className="heading">
           <div className="heading__name">
             <div className="heading__title">
-              <div className="heading__actions">
-              </div>
+              <div className="heading__actions"></div>
             </div>
           </div>
         </div>

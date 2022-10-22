@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Grid, Input, Pagination, Select, useTheme } from '@geist-ui/react';
 import SearchIcon from '@geist-ui/react-icons/search';
-import MyCardStudent from '@/components/my-cardStudent';
+import MyCardStudent from '@/components/cardStudent';
 import { ChevronLeft, ChevronRight } from 'react-feather';
 import { MyModal } from '@/components/model-custom';
 import { AddEstudentForm } from '@/components/add-estudent-form';
