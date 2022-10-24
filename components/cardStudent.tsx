@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { Dispatch, SetStateAction, useContext, useState } from 'react';
 import { Avatar, Button, Text, Card, useTheme, useToasts, Snippet } from '@geist-ui/react';
 import { Edit3, Trash2 } from 'react-feather';
 import { MyModal } from './model-custom';
@@ -6,6 +6,7 @@ import { baseAPI } from '../api/baseApi';
 import { DeleteStudentResponse } from 'interfaces/actionsResponse';
 import { Student } from 'interfaces/studentsResponse';
 import { UpdateEstudentForm } from './update-estudent-form';
+import { SocketContext } from 'context/SocketProvider';
 const noAvatar = '/assets/no-avatar.png';
 
 interface Props {
@@ -34,6 +35,7 @@ const MyCardStudent: React.FC<MyCardProps> = ({
   const [isVisibleModal, setIsVisibleModal] = useState(false);
   const [modalContent, setModalContent] = useState(null);
   const [, setToast] = useToasts();
+  const { socket } = useContext(SocketContext);
 
   const updateModal = () => {
     setTitleModal('Actualizar Estudiante');
@@ -76,6 +78,7 @@ const MyCardStudent: React.FC<MyCardProps> = ({
     const {
       data: { message, students }
     } = response;
+    socket.emit('delete-student');
     setToast({
       text: `El Estudiante ${students.nombres} ${students.apellidos} fue ${message.toLowerCase()}`,
       delay: 3000

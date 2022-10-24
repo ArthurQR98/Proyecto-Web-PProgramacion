@@ -5,6 +5,7 @@ import { GeistProvider, CssBaseline } from '@geist-ui/react';
 import { PrefersContext, themes, ThemeType } from '@/lib/use-prefers';
 import Menu from '@/components/navigation/menu';
 import Footer from '@/components/footer';
+import { SocketProvider } from 'context/SocketProvider';
 
 const DashboardApp = ({ Component, pageProps }: AppProps) => {
   const [themeType, setThemeType] = useState<ThemeType>('dark');
@@ -36,9 +37,11 @@ const DashboardApp = ({ Component, pageProps }: AppProps) => {
       <GeistProvider themeType={themeType}>
         <CssBaseline />
         <PrefersContext.Provider value={{ themeType, switchTheme }}>
-          <Menu />
-          <Component {...pageProps} />
-          <Footer />
+          <SocketProvider>
+            <Menu />
+            <Component {...pageProps} />
+            <Footer />
+          </SocketProvider>
         </PrefersContext.Provider>
       </GeistProvider>
     </>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Button, Grid, Pagination, useTheme, useToasts } from '@geist-ui/react';
 import Heading from '@/components/heading';
 import { MyModal } from '@/components/model-custom';
@@ -7,6 +7,7 @@ import { baseAPI } from 'api/baseApi';
 import { CreateEnrollResponse, GetEnrollResponse, Meta } from 'interfaces/actionsResponse';
 import { CardEnroll } from '@/components/cardEnroll';
 import { ChevronLeft, ChevronRight } from 'react-feather';
+import { SocketContext } from 'context/SocketProvider';
 
 const Page = () => {
   const theme = useTheme();
@@ -17,6 +18,7 @@ const Page = () => {
   const [metadatos, setMetadatos] = useState<Meta>({} as Meta);
   const [currentPage, setCurrentPage] = useState(1);
   const [, setToast] = useToasts();
+  const { socket } = useContext(SocketContext);
 
   // Modal
   const [isVisibleModal, setIsVisibleModal] = useState(false);
@@ -49,6 +51,7 @@ const Page = () => {
       message,
       enroll: { estudiante }
     } = response.data;
+    socket.emit('new-enroll');
     setToast({ text: `El estudiante ${estudiante.nombres} ${estudiante.apellidos} fue ${message.toLowerCase()}` });
     setEnrollData({});
     setIsVisibleModal(false);

@@ -1,6 +1,7 @@
 import { Button, Card, Divider, Image, Select, Text, useToasts } from '@geist-ui/react';
+import { SocketContext } from 'context/SocketProvider';
 import { DeleteEnrollResponse, Enroll, UpdateEnrollResponse } from 'interfaces/actionsResponse';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Edit3, Trash2, ArrowDownCircle } from 'react-feather';
 const noAvatar = '/assets/no-avatar.png';
 import { baseAPI } from '../api/baseApi';
@@ -22,6 +23,7 @@ export const CardEnroll: React.FC<Props> = ({ enroll, enrollData, setReloadEnrol
   const [modalContent, setModalContent] = useState(null);
   const [exec, setExec] = useState('');
   const [, setToast] = useToasts();
+  const { socket } = useContext(SocketContext);
 
   const downloadReport = () => {
     baseAPI({ method: 'post', url: `/enroll/report/${enroll.id}`, responseType: 'blob' }).then((res) => {
@@ -75,6 +77,7 @@ export const CardEnroll: React.FC<Props> = ({ enroll, enrollData, setReloadEnrol
       message,
       enroll: { estudiante }
     } = response.data;
+    socket.emit('delete-enroll');
     setToast({
       text: `La Matricula del estudiante ${estudiante.nombres} ${estudiante.apellidos} fue ${message.toLowerCase()}`,
       delay: 3000

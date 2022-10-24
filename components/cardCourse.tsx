@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { Dispatch, SetStateAction, useContext, useState } from 'react';
 import { Avatar, Button, Text, Card, useTheme, useToasts } from '@geist-ui/react';
 import { Edit3, Trash2 } from 'react-feather';
 import { MyModal } from './model-custom';
@@ -6,6 +6,7 @@ import { baseAPI } from '../api/baseApi';
 import { Course } from 'interfaces/coursesResponse';
 import { DeleteCourseResponse } from 'interfaces/actionsResponse';
 import { UpdateCourseForm } from './update-course-form';
+import { SocketContext } from 'context/SocketProvider';
 
 interface Props {
   course: Course;
@@ -26,6 +27,7 @@ const MyCardCourse: React.FC<MyCardProps> = ({ course, courseData, setReloadCour
   const [isVisibleModal, setIsVisibleModal] = useState(false);
   const [modalContent, setModalContent] = useState(null);
   const [exec, setExec] = useState('');
+  const { socket } = useContext(SocketContext);
 
   const removeHandler = () => {
     setIsVisibleModal(true);
@@ -51,6 +53,7 @@ const MyCardCourse: React.FC<MyCardProps> = ({ course, courseData, setReloadCour
     setLoading(true);
     const response = await baseAPI.delete<DeleteCourseResponse>(`/course/${course.id}`);
     const { course: remove, message } = response.data;
+    socket.emit('delete-course');
     setToast({ text: `El curso ${remove.nombre} fue ${message.toLowerCase()}`, delay: 3000 });
     setIsVisibleModal(false);
     setReloadCourse(true);

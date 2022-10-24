@@ -1,8 +1,9 @@
 import { useToasts } from '@geist-ui/react';
 import { baseAPI } from 'api/baseApi';
+import { SocketContext } from 'context/SocketProvider';
 import { CreateStudentResponse } from 'interfaces/actionsResponse';
 import { Meta, StudentsResponse } from 'interfaces/studentsResponse';
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
 
 export const useStudentPage = (studentData, closeModal, setLoading) => {
   type Timer = ReturnType<typeof setTimeout>;
@@ -15,6 +16,7 @@ export const useStudentPage = (studentData, closeModal, setLoading) => {
   const [students, setStudents] = useState([]);
   const [status, setStatus] = useState<string | string[]>('1');
   const [metadatos, setMetadatos] = useState<Meta>({} as Meta);
+  const { socket } = useContext(SocketContext);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -66,6 +68,7 @@ export const useStudentPage = (studentData, closeModal, setLoading) => {
       const {
         data: { student, message }
       } = response;
+      socket.emit('new-student');
       setToast({
         text: `El estudiante ${student.nombres} ${student.apellidos} fue ${message.toLowerCase()}`,
         delay: 3000

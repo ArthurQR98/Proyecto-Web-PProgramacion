@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
 import { Button, Grid, Input, Pagination, Select, useTheme, useToasts } from '@geist-ui/react';
 import SearchIcon from '@geist-ui/react-icons/search';
 import { ChevronLeft, ChevronRight } from 'react-feather';
@@ -8,6 +8,7 @@ import MyCardCourse from '@/components/cardCourse';
 import { MyModal } from '@/components/model-custom';
 import { AddCourseForm } from '@/components/add-course-form';
 import { CreateCourseResponse } from 'interfaces/actionsResponse';
+import { SocketContext } from 'context/SocketProvider';
 
 const Page = () => {
   const theme = useTheme();
@@ -25,6 +26,7 @@ const Page = () => {
   const [metadatos, setMetadatos] = useState<Meta>({} as Meta);
 
   const [loading, setLoading] = useState(false);
+  const { socket } = useContext(SocketContext);
 
   // Modal
   const [isVisibleModal, setIsVisibleModal] = useState(false);
@@ -99,6 +101,7 @@ const Page = () => {
     setLoading(true);
     const response = await baseAPI.postForm<CreateCourseResponse>('/course', courseData);
     const { message, course } = response.data;
+    socket.emit('new-course');
     setToast({ text: `El curso ${course.nombre} fue ${message.toLowerCase()}`, delay: 3000 });
     setReloadCourse(true);
     setIsVisibleModal(false);

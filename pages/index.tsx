@@ -1,11 +1,45 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Card, Grid, Text, useTheme } from '@geist-ui/react';
 import Heading from '@/components/heading';
 import { GraficBar } from '@/components/grafic-bar';
 import { GraficPie } from '@/components/grafic-pie';
+import { SocketContext } from 'context/SocketProvider';
+
+export interface StudentState {
+  estudiantes: number;
+  graduados: number;
+}
+
+export interface EnrollState {
+  matriculados: number;
+  sinMatricula: number;
+}
 
 const Page = () => {
   const theme = useTheme();
+  const [students, setStudents] = useState<StudentState>({
+    estudiantes: 0,
+    graduados: 0
+  });
+  const [enroll, setEnroll] = useState<EnrollState>({
+    matriculados: 0,
+    sinMatricula: 0
+  });
+  const { socket } = useContext(SocketContext);
+
+  useEffect(() => {
+    socket.on('all-students', (data) => {
+      setStudents(data);
+    });
+    return () => socket.off('all-students');
+  }, [socket]);
+
+  useEffect(() => {
+    socket.on('enrolls', (data) => {
+      setEnroll(data);
+    });
+    return () => socket.off('enrolls');
+  }, [socket]);
 
   return (
     <>
@@ -22,11 +56,11 @@ const Page = () => {
             <Grid xs={24} justify="center">
               <Card shadow width="480px" height="100%" margin={1}>
                 <Text h3>Estudiantes</Text>
-                <GraficPie />
+                <GraficPie labels={['Estudiantes', 'Egresados']} info={students} />
               </Card>
               <Card shadow width="480px" height="100%" margin={1}>
                 <Text h3>Matriculados</Text>
-                <GraficPie />
+                <GraficPie labels={['Matriculados', 'No Matriculados']} info={enroll} />
               </Card>
             </Grid>
           </Grid.Container>

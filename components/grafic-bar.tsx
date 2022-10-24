@@ -1,4 +1,6 @@
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import { SocketContext } from 'context/SocketProvider';
+import { useContext, useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -10,8 +12,25 @@ interface Props {
 
 type GraficBarProps = Props;
 
-export const GraficBar: React.FC<GraficBarProps> = ({ data: info }) => {
-  const labels = ['Enfermeria', 'Contabilidad'];
+interface CourseByProgramState {
+  contabilidad: number;
+  enfermeria: number;
+}
+
+export const GraficBar: React.FC<GraficBarProps> = ({}) => {
+  const [courseByPrograms, setCourseByPrograms] = useState<CourseByProgramState>({
+    contabilidad: 0,
+    enfermeria: 0
+  });
+  const { socket } = useContext(SocketContext);
+
+  useEffect(() => {
+    socket.on('courses-by-program', (data) => {
+      setCourseByPrograms(data);
+    });
+    return () => socket.off('courses-by-program');
+  }, [socket]);
+
   const options = {
     responsive: true,
     plugins: {
@@ -25,17 +44,14 @@ export const GraficBar: React.FC<GraficBarProps> = ({ data: info }) => {
   };
 
   const data = {
-    labels,
+    labels: ['Contabilidad', 'Enfermeria'],
     datasets: [
       {
-        label: 'Enfermeria',
-        data: 5,
-        backgroundColor: 'rgba(255, 99, 132, 0.5)'
-      },
-      {
-        label: 'Contabilidad',
-        data: 10,
-        backgroundColor: 'rgba(53, 162, 235, 0.5)'
+        label: '# de Cursos',
+        data: [courseByPrograms.contabilidad, courseByPrograms.enfermeria],
+        backgroundColor: ['rgba(153, 102, 255, 0.2)', 'rgba(75, 192, 192, 0.2)'],
+        borderColor: ['rgba(153, 102, 255, 1)', 'rgba(75, 192, 192, 1)'],
+        borderWidth: 1
       }
     ]
   };
