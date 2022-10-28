@@ -1,14 +1,13 @@
 <p align="center">
   <a href="" rel="noopener">
- <img width=200px height=200px src="https://i.imgur.com/6wj0hh6.jpg" alt="Project logo"></a>
+ <img width=200px height=200px src="/resources/project.gif" alt="Project"></a>
 </p>
 
-<h3 align="center">boilerplate-hexagonal</h3>
+<h3 align="center">Proyecto Matricula - NextJS</h3>
 
 <div align="center">
 
 [![Status](https://img.shields.io/badge/status-active-success.svg)]()
-[![GitHub Issues](https://img.shields.io/github/issues/kylelobo/The-Documentation-Compendium.svg)](https://github.com/kylelobo/The-Documentation-Compendium/issues)
 [![GitHub Pull Requests](https://img.shields.io/github/issues-pr/kylelobo/The-Documentation-Compendium.svg)](https://github.com/kylelobo/The-Documentation-Compendium/pulls)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
 
@@ -16,10 +15,13 @@
 
 ---
 
-<p align="center"> Few lines describing your project.
-    <br> 
+<p align="center">
+    Use of NextJS with typescript
+    <br>
 </p>
 
+visit the repository of the backend part of the project
+- [Backend Project](https://github.com/ArthurQR98/Proyecto-Web-PProgramacionBackend)
 ## 📝 Table of Contents
 
 - [About](#about)
@@ -27,14 +29,11 @@
 - [Deployment](#deployment)
 - [Usage](#usage)
 - [Built Using](#built_using)
-- [TODO](../TODO.md)
-- [Contributing](../CONTRIBUTING.md)
 - [Authors](#authors)
-- [Acknowledgments](#acknowledgement)
 
 ## 🧐 About <a name = "about"></a>
 
-Write about 1-2 paragraphs describing the purpose of your project.
+This project is the graphical representation of some modules of management and enrollment of students in a study center.
 
 ## 🏁 Getting Started <a name = "getting_started"></a>
 
@@ -42,73 +41,58 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-What things you need to install the software and how to install them.
+Nodejs v.14 or higher
 
 ```
-Give examples
+node --version
 ```
-
 ### Installing
 
-A step by step series of examples that tell you how to get a development env running.
-
-Say what the step will be
+Configure the .env.local file using the example file .env.local.example as a reference
 
 ```
-Give the example
+NEXT_PUBLIC_BASE_URL=url_of_backend
 ```
 
-And repeat
+Add project dependencies [NPM | YARN]
 
 ```
-until finished
+npm install
 ```
 
-End with an example of getting some data out of the system or using it for a little demo.
-
-## 🔧 Running the tests <a name = "tests"></a>
-
-Explain how to run the automated tests for this system.
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
 ```
-Give an example
+yarn
 ```
 
-### And coding style tests
-
-Explain what these tests test and why
+Run the application in development
 
 ```
-Give an example
+yarn dev
 ```
 
 ## 🎈 Usage <a name="usage"></a>
 
-Add notes about how to use the system.
+To view and interact with project visit the url.
+```by default url```
+
+```
+localhost:3000
+```
 
 ## 🚀 Deployment <a name = "deployment"></a>
 
-Add additional notes about how to deploy this on a live system.
+run the command for production
+
+```
+yarn build
+```
 
 ## ⛏️ Built Using <a name = "built_using"></a>
 
-- [MongoDB](https://www.mongodb.com/) - Database
-- [Express](https://expressjs.com/) - Server Framework
-- [VueJs](https://vuejs.org/) - Web Framework
-- [NodeJs](https://nodejs.org/en/) - Server Environment
-
+- [NextJS](https://www.mongodb.com/) - Framework Web
+- [Geist](https://geist-ui.dev/en-us) - Design System Library
+- [Socket](https://socket.io/) - Socket IO Client
+- [Typescript](https://www.typescriptlang.org/) - Programming Language
 ## ✍️ Authors <a name = "authors"></a>
 
-- [@kylelobo](https://github.com/kylelobo) - Idea & Initial work
-
-See also the list of [contributors](https://github.com/kylelobo/The-Documentation-Compendium/contributors) who participated in this project.
-
-## 🎉 Acknowledgements <a name = "acknowledgement"></a>
-
-- Hat tip to anyone whose code was used
-- Inspiration
-- References
+- [@ArthurDev](https://github.com/ArthurQR98) - Idea & Initial work
