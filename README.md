@@ -1,6 +1,6 @@
 <p align="center">
   <a href="" rel="noopener">
- <img width=200px height=200px src="/resources/project.gif" alt="Project"></a>
+ <img width=800px height=500px src="/resources/project.gif" alt="Project"></a>
 </p>
 
 <h3 align="center">Proyecto Matricula - NextJS</h3>
